@@ -1,16 +1,23 @@
-const path = require('path');
-const { release, version } = require('os');
-const { createServer: createServerHttp } = require('http');
-require('./files/c');
+import path from "path";
+import {release, version} from "os";
+import {createServer as createServerHttp} from "http";
+import {getDirName, getFileName} from "../helpres/helpers.js";
+import "./files/c.js";
+
+const jsonAssertionForImport =  {
+    assert: { type: "json" },
+}
+const __filename = getFileName(import.meta);
+const __dirname = getDirName(import.meta);
 
 const random = Math.random();
 
 let unknownObject;
 
 if (random > 0.5) {
-    unknownObject = require('./files/a.json');
+    unknownObject = import('./files/a.json', jsonAssertionForImport);
 } else {
-    unknownObject = require('./files/b.json');
+    unknownObject = import('./files/b.json', jsonAssertionForImport);
 }
 
 console.log(`Release ${release()}`);
@@ -24,7 +31,7 @@ const myServer = createServerHttp((_, res) => {
     res.end('Request accepted');
 });
 
-const PORT = 3000;
+const PORT = 3030;
 
 console.log(unknownObject);
 
@@ -33,7 +40,7 @@ myServer.listen(PORT, () => {
     console.log('To terminate it, use Ctrl+C combination');
 });
 
-module.exports = {
+export {
     unknownObject,
     myServer,
 };
