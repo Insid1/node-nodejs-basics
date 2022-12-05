@@ -1,5 +1,13 @@
+import {fork} from 'child_process'
+import {getDirName} from "../helpres/helpers.js";
+
+const __dirname = getDirName(import.meta);
+
 const spawnChildProcess = async (args) => {
-    // Write your code here
+  const child = fork(
+    `${__dirname}files/script.js`
+    , [...args.split(' ')])
+  child.send(args)
 };
 
-spawnChildProcess();
+await spawnChildProcess('--arg1 val1');
